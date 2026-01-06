@@ -20,4 +20,13 @@ describe('getGreeting', () => {
   it('returns hello world when name is undefined', () => {
     expect(getGreeting(undefined)).toBe('Hello world!');
   });
+
+  it('returns personalized greeting when name is a number', () => {
+    expect(getGreeting(123)).toBe('Hello world! From 123');
+  });
+
+  it('returns personalized greeting when name is an object', () => {
+    const obj = { toString: () => 'ObjectName' };
+    expect(getGreeting(obj)).toBe('Hello world! From ObjectName');
+  });
 });

@@ -13,6 +13,11 @@ describe('GET /hello', () => {
     expect(res.statusCode).toEqual(200);
     expect(res.text).toBe('Hello world! From John');
   });
+
+  it('should handle 404 for unknown routes', async () => {
+    const res = await request(app).get('/unknown');
+    expect(res.statusCode).toEqual(404);
+  });
 });
 
 describe('POST /hello', () => {
@@ -28,5 +33,11 @@ describe('POST /hello', () => {
       .set('x-name', 'Jane');
     expect(res.statusCode).toEqual(200);
     expect(res.text).toBe('Hello world! From Jane');
+  });
+});
+
+describe('Server startup', () => {
+  it('should export the app', () => {
+    expect(app).toBeDefined();
   });
 });
