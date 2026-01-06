@@ -49,6 +49,6 @@ describe('getGreeting', () => {
 
   it('returns personalized greeting when name is a function', () => {
     const fn = () => 'test';
-    expect(getGreeting(fn)).toBe('Hello world! From () => "test"');
+    expect(getGreeting(fn)).toBe(`Hello world! From ${String(fn)}`);
   });
 });

@@ -1,9 +1,14 @@
+
 function getGreeting(name) {
   const greeting = `Hello world!`;
 
   if (name) {
-    const wisher = `From ${name}`;
-
+    let wisher;
+    if (typeof name === 'symbol' || typeof name === 'function') {
+      wisher = `From ${String(name)}`;
+    } else {
+      wisher = `From ${name}`;
+    }
     return `${greeting} ${wisher}`;
   }
 
