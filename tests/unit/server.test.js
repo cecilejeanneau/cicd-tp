@@ -40,4 +40,8 @@ describe('Server startup', () => {
   it('should export the app', () => {
     expect(app).toBeDefined();
   });
+
+  it('should have a listen method', () => {
+    expect(typeof app.listen).toBe('function');
+  });
 });
