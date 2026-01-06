@@ -50,14 +50,20 @@ describe('Server startup', () => {
     const originalLog = console.log;
     console.log = jest.fn();
 
-    // Simulate direct execution
+    // Mock require.main to simulate direct execution
+    const originalMain = require.main;
+    require.main = module;
+
+    // Re-require the module to trigger the if block
     const modulePath = require.resolve('../../src/server');
     delete require.cache[modulePath];
     require(modulePath);
 
+    // Verify console.log was called with the expected message
     expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Server listening on port'));
 
-    // Restore console.log
+    // Restore original values
     console.log = originalLog;
+    require.main = originalMain;
   });
 });
