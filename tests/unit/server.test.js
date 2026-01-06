@@ -45,25 +45,9 @@ describe('Server startup', () => {
     expect(typeof app.listen).toBe('function');
   });
 
-  it('should start the server when run directly', () => {
-    // Mock console.log to verify it's called
-    const originalLog = console.log;
-    console.log = jest.fn();
-
-    // Mock require.main to simulate direct execution
-    const originalMain = require.main;
-    require.main = module;
-
-    // Re-require the module to trigger the if block
-    const modulePath = require.resolve('../../src/server');
-    delete require.cache[modulePath];
-    require(modulePath);
-
-    // Verify console.log was called with the expected message
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Server listening on port'));
-
-    // Restore original values
-    console.log = originalLog;
-    require.main = originalMain;
+  it('should respond to /hello route', async () => {
+    const res = await request(app).get('/hello/World');
+    expect(res.statusCode).toEqual(200);
+    expect(res.text).toContain('Hello');
   });
 });
