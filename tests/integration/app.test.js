@@ -13,6 +13,18 @@ describe("GET /hello", () => {
     expect(res.statusCode).toBe(200);
     expect(res.text).toBe("Hello world! From Alice");
   });
+
+  it("should handle empty name parameter", async () => {
+    const res = await request(app).get("/hello/");
+    expect(res.statusCode).toBe(200);
+    expect(res.text).toBe("Hello world!");
+  });
+
+  it("should handle multiple name parameters", async () => {
+    const res = await request(app).get("/hello/Alice/Bob");
+    expect(res.statusCode).toBe(200);
+    expect(res.text).toBe("Hello world! From Alice");
+  });
 });
 
 describe("POST /hello", () => {
@@ -28,5 +40,22 @@ describe("POST /hello", () => {
       .set('x-name', 'Bob');
     expect(res.statusCode).toBe(200);
     expect(res.text).toBe("Hello world! From Bob");
+  });
+
+  it("should handle empty name header", async () => {
+    const res = await request(app)
+      .post("/hello")
+      .set('x-name', '');
+    expect(res.statusCode).toBe(200);
+    expect(res.text).toBe("Hello world!");
+  });
+
+  it("should handle multiple name headers", async () => {
+    const res = await request(app)
+      .post("/hello")
+      .set('x-name', 'Alice')
+      .set('x-name', 'Bob');
+    expect(res.statusCode).toBe(200);
+    expect(res.text).toBe("Hello world! From Alice");
   });
 });
