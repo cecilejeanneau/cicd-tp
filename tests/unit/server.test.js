@@ -44,4 +44,20 @@ describe('Server startup', () => {
   it('should have a listen method', () => {
     expect(typeof app.listen).toBe('function');
   });
+
+  it('should start the server when run directly', () => {
+    // Mock console.log to verify it's called
+    const originalLog = console.log;
+    console.log = jest.fn();
+
+    // Simulate direct execution
+    const modulePath = require.resolve('../../src/server');
+    delete require.cache[modulePath];
+    require(modulePath);
+
+    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Server listening on port'));
+
+    // Restore console.log
+    console.log = originalLog;
+  });
 });
