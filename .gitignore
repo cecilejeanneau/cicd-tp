@@ -1,3 +1,6 @@
-allure-results/
 node_modules/
 .aider.*
+
+# Allure results and reports
+allure-results/
+allure-report/

@@ -21,4 +21,26 @@ describe("E2E GET /hello", () => {
     expect(res.status).toBe(200);
     expect(res.data).toBe("Hello world!");
   });
+
+  it("responds with personalized greeting", async () => {
+    const res = await axios.get(`${baseURL}/hello/John`);
+    expect(res.status).toBe(200);
+    expect(res.data).toBe("Hello world! From John");
+  });
+});
+
+describe("E2E POST /hello", () => {
+  it("responds with Hello world when no name header", async () => {
+    const res = await axios.post(`${baseURL}/hello`);
+    expect(res.status).toBe(200);
+    expect(res.data).toBe("Hello world!");
+  });
+
+  it("responds with personalized greeting when name header provided", async () => {
+    const res = await axios.post(`${baseURL}/hello`, {}, {
+      headers: { 'x-name': 'Jane' }
+    });
+    expect(res.status).toBe(200);
+    expect(res.data).toBe("Hello world! From Jane");
+  });
 });
