@@ -37,9 +37,18 @@ summary.push(`- **Passed:** ${passed}`);
 summary.push(`- **Failed:** ${failed}`);
 summary.push(`- **Skipped:** ${skipped}`);
 summary.push('');
-summary.push('| Suite | Passed | Failed | Skipped |');
-summary.push('|-------|--------|--------|---------|');
+summary.push('| Suite | Passed | Failed | Skipped | Duration (ms) |');
+summary.push('|-------|--------|--------|---------|--------------|');
 results.testResults.forEach(suite => {
-  summary.push(`| ${suite.name.split('/').pop()} | ${suite.numPassingTests} | ${suite.numFailingTests} | ${suite.numPendingTests} |`);
+  let pass = 0, fail = 0, skip = 0;
+  if (suite.assertionResults && Array.isArray(suite.assertionResults)) {
+    suite.assertionResults.forEach(test => {
+      if (test.status === 'passed') pass++;
+      else if (test.status === 'failed') fail++;
+      else if (test.status === 'pending' || test.status === 'skipped' || test.status === 'todo') skip++;
+    });
+  }
+  const duration = suite.perfStats ? (suite.perfStats.end - suite.perfStats.start) : '';
+  summary.push(`| ${suite.name.split('/').pop()} | ${pass} | ${fail} | ${skip} | ${duration} |`);
 });
 fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary.join('\n'));
