@@ -35,7 +35,10 @@ jobs:
         with:
             path: node_modules
             key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - run: npm test
+      - run: npx jest --json --outputFile=jest-results.json || true
+      - name: Add Jest summary to Actions summary
+        if: always()
+        run: node .github/scripts/jest-summary.js
       - name: Generate Allure Report
         run: |
           npx allure generate ./allure-results --clean -o ./allure-report
