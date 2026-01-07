@@ -48,7 +48,12 @@ results.testResults.forEach(suite => {
       else if (test.status === 'pending' || test.status === 'skipped' || test.status === 'todo') skip++;
     });
   }
-  const duration = suite.perfStats ? (suite.perfStats.end - suite.perfStats.start) : '';
+  let duration = '';
+  if (suite.perfStats && typeof suite.perfStats.runtime === 'number') {
+    duration = suite.perfStats.runtime;
+  } else if (suite.assertionResults && Array.isArray(suite.assertionResults)) {
+    duration = suite.assertionResults.reduce((sum, test) => sum + (test.duration || 0), 0);
+  }
   summary.push(`| ${suite.name.split('/').pop()} | ${pass} | ${fail} | ${skip} | ${duration} |`);
 });
 fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary.join('\n'));
