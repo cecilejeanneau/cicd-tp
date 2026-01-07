@@ -37,8 +37,8 @@ summary.push(`- **Passed:** ${passed}`);
 summary.push(`- **Failed:** ${failed}`);
 summary.push(`- **Skipped:** ${skipped}`);
 summary.push('');
-summary.push('| Suite | Passed | Failed | Skipped | Duration (ms) |');
-summary.push('|-------|--------|--------|---------|--------------|');
+summary.push('<table>');
+summary.push('<tr><th>Suite</th><th>Passed</th><th>Failed</th><th>Skipped</th><th>Duration (ms)</th></tr>');
 results.testResults.forEach(suite => {
   let pass = 0, fail = 0, skip = 0;
   if (suite.assertionResults && Array.isArray(suite.assertionResults)) {
@@ -54,6 +54,15 @@ results.testResults.forEach(suite => {
   } else if (suite.assertionResults && Array.isArray(suite.assertionResults)) {
     duration = suite.assertionResults.reduce((sum, test) => sum + (test.duration || 0), 0);
   }
-  summary.push(`| ${suite.name.split('/').pop()} | ${pass} | ${fail} | ${skip} | ${duration} |`);
+  const totalTests = pass + fail + skip;
+  let bgColor = '#eee';
+  if (totalTests > 0) {
+    const passRate = pass / totalTests;
+    if (passRate === 1) bgColor = '#4caf50'; // green
+    else if (passRate > 0.5) bgColor = '#ffc107'; // orange
+    else bgColor = '#f44336'; // red
+  }
+  summary.push(`<tr><td style="background:${bgColor};font-weight:bold;">${suite.name.split('/').pop()}</td><td>${pass}</td><td>${fail}</td><td>${skip}</td><td>${duration}</td></tr>`);
 });
+summary.push('</table>');
 fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary.join('\n'));
