@@ -1,7 +1,7 @@
-import { Status } from "allure-js-commons";
-import os from "node:os";
+const { Status } = require("allure-js-commons");
+const os = require("node:os");
 
-export default {
+module.exports = {
   testEnvironment: "allure-jest/node",
   testEnvironmentOptions: {
     resultsDir: "allure-results",
